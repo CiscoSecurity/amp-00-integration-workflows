@@ -9,7 +9,8 @@ Query Trajectory
     Cisco AMP for Endpoints uses the term trajectory to describe the execution timeline of activities on a
     computer (multi-file execution).
 
-For example, if Computer A is acting strange during a certain time window you would follow these steps:
+For example, if Computer A was under investigation and you wanted to review the SHA-256s of processes and files on the
+computer you would follow these steps:
 
 1. First, you would get the computer trajectory and query by the time window using the following `request <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Fcomputers%2F%7B%3Aconnector_guid%7D%2Ftrajectory&api_host=api.amp.cisco.com&api_resource=Computer&api_version=v1>`_:
 
@@ -128,15 +129,15 @@ For example, if Computer A is acting strange during a certain time window you wo
         }
 
 
-2. Next, you would save a list of the SHA-256 hashes returned.
+2. Next, you would parse the response for ``.data.events[].file.identity.sha256`` and ``.data.events[].file.parent.identity.sha256``.
 3. You would then evaluate these hashes with your product or a 3rd party observable service.
 
 Query Events
 ------------
 
-To hunt for activity scoped by an observable follow these steps:
+To hunt for computers that have seen a SHA-256 but have not created an event for that SHA-256 follow these steps:
 
-1. First, use the following `request <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Fcomputers%2Factivity&api_host=api.amp.cisco.com&api_resource=Computer+Activity&api_version=v1>`_ to see what endpoints have seen the SHA-256 observable:
+1. First, use the following `Computer Activity <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Fcomputers%2Factivity&api_host=api.amp.cisco.com&api_resource=Computer+Activity&api_version=v1>`_ to get a list of computers that have seen the SHA-256 observable:
 
     .. code::
 
@@ -180,7 +181,8 @@ To hunt for activity scoped by an observable follow these steps:
           ]
         }
 
-2. Next, use the following `request <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Fevents&api_host=api.amp.cisco.com&api_resource=Event&api_version=v1>`_ to see what events were fired on the same SHA-256 observable:
+2. Store the values of ``.data[].connector_guid``.
+3. Query the `Events Endpoint <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Fevents&api_host=api.amp.cisco.com&api_resource=Event&api_version=v1>`_ to see what events were generated for the same SHA-256 observable:
 
     .. code::
 
@@ -267,11 +269,15 @@ To hunt for activity scoped by an observable follow these steps:
           ]
         }
 
-3. Then, create a diff of the seen observable that was not fired as an AMP event and then query for execution with the following `script <https://github.com/CiscoSecurity/amp-04-check-sha256-execution/blob/master/check_for_execution.py>`_.
-
-4. Raise a P1 ticket for the endpoints that saw the file but did not raise an event. This means that there is malicious activity that needs to be sent as an alert to the SOC.
+4. Store the values of ``.data[].connector_guid``.
+5. Diff the ``connector_guid`` values found in step two with the ``connector_guid`` values found in step four.
+6. Create a high priority alert for the endpoints that have seen the file but did not generate any events for it. This means that there is malicious activity that needs to be sent as an alert to the SOC.
 
 .. NOTE::
 
-    You can also substitute the SHA-256 hash above with the following: processes, filenames, URLs, and IPs.
+    Example implementations of similar workflows can be found here:
+
+    - https://github.com/CiscoSecurity/amp-04-sha256-to-command-line-arguments
+    - https://github.com/CiscoSecurity/amp-04-check-sha256-execution
+    - https://github.com/CiscoSecurity/amp-04-sha256-to-network-connections
 
