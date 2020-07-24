@@ -1,7 +1,7 @@
 Pivot into AMP for Endpoints
 ============================
 
-Pivoting by Search
+Pivoting to Search
 ------------------
 
 Search File Trajectory, Device Trajectory, File Analysis, Users, Groups, Policies, and other sources using th following URL format:
@@ -50,7 +50,7 @@ Example with URL:
 
     https://console.amp.cisco.com/search?query=http://propay24.ru/4/pict.jpg
 
-Pivoting by Dashboard
+Pivoting to Dashboard
 ---------------------
 
 Example for the SHA-256 from the last 30 days:
@@ -71,7 +71,7 @@ Example for the Event Type from the last 30 days:
 
     https://console.amp.cisco.com/dashboard?duration=720&event_type=<EVENT_TYPE_ID>
 
-Pivoting by Events
+Pivoting to Events
 ------------------
 
 Example for the Event Type(s) from the last 30 days:
@@ -104,7 +104,7 @@ Example for the Detection Name from the last 30 days:
 
     https://console.amp.cisco.com/dashboard/overview#/events/show/{"filters":{"agg":[],"time":"all","tid":[],"det_name":["<DETECTION>"]},"sort_by":"ts","sort_order":"desc","name":""}
 
-Pivoting by File Trajectory
+Pivoting to File Trajectory
 ---------------------------
 
 Example for pivoting by file trajectory:
@@ -113,7 +113,7 @@ Example for pivoting by file trajectory:
 
     https://console.amp.cisco.com/file/trajectory/<SHA256>
 
-Pivoting by Device Trajectory
+Pivoting to Device Trajectory
 -----------------------------
 
 Example to load to most recent event:
