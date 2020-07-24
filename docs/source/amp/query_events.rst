@@ -1,8 +1,8 @@
-Hunting
-=======
+Query Events
+============
 
-Query Trajectory
-----------------
+Trajectory Events
+-----------------
 
 .. NOTE::
 
@@ -12,7 +12,7 @@ Query Trajectory
 For example, if Computer A was under investigation and you wanted to review the SHA-256s of processes and files on the
 computer you would follow these steps:
 
-1. First, you would get the computer trajectory and query by the time window using the following `request <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Fcomputers%2F%7B%3Aconnector_guid%7D%2Ftrajectory&api_host=api.amp.cisco.com&api_resource=Computer&api_version=v1>`_:
+1. First, query the `Computer Activity <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Fcomputers%2F%7B%3Aconnector_guid%7D%2Ftrajectory&api_host=api.amp.cisco.com&api_resource=Computer&api_version=v1>`_ endpoint:
 
     .. code::
 
@@ -132,12 +132,12 @@ computer you would follow these steps:
 2. Next, you would parse the response for ``.data.events[].file.identity.sha256`` and ``.data.events[].file.parent.identity.sha256``.
 3. You would then evaluate these hashes with your product or a 3rd party observable service.
 
-Query Events
-------------
+Detection Events
+----------------
 
 To hunt for computers that have seen a SHA-256 but have not created an event for that SHA-256 follow these steps:
 
-1. First, use the following `Computer Activity <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Fcomputers%2Factivity&api_host=api.amp.cisco.com&api_resource=Computer+Activity&api_version=v1>`_ to get a list of computers that have seen the SHA-256 observable:
+1.First, query the `Computer Activity <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Fcomputers%2Factivity&api_host=api.amp.cisco.com&api_resource=Computer+Activity&api_version=v1>`_ to get a list of computers that have seen the SHA-256 observable:
 
     .. code::
 
