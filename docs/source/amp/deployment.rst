@@ -375,7 +375,10 @@ Stopping Agents
 Windows
 """""""
 
-Stop agent with the following command by finding the directory path for ``sfc.exe`` ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for Endpoints process:
+Find the directory path for sfc.exe ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for
+Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be
+``%AMP_InstallDir%VERSION\sfc.exe``. To stop the agent run the following command:
+
 
 .. code::
 
@@ -431,7 +434,7 @@ Then run the following command:
 
 .. code::
 
-    "C:\Program Files\Cisco\AMP\7.2.7\ipsupporttool.exe" -o "<PathOfClientFolderOfCurrentSite>"
+    "C:\Program Files\Cisco\AMP\7.2.7\ipsupporttool.exe" -o "<DesiredOutputDirectory>"
 
 Linux
 """""
@@ -440,7 +443,7 @@ Run the following command:
 
 .. code::
 
-    "/opt/cisco/amp/bin/ampsupport" -o "<PathOfClientFolderOfCurrentSite>"
+    "/opt/cisco/amp/bin/ampsupport" -o "<DesiredOutputDirectory>"
 
 MacOS
 """""
@@ -449,7 +452,7 @@ Run the following command:
 
 .. code::
 
-    /Library/Application Support/Cisco/AMP for Endpoints Connector/SupportTool" -o "<PathOfClientFolderOfCurrentSite>"
+    /Library/Application Support/Cisco/AMP for Endpoints Connector/SupportTool" -o "<DesiredOutputDirectory>"
 
 Reboot Required
 ^^^^^^^^^^^^^^^
@@ -468,11 +471,13 @@ Enable Debug Logging
 Windows
 """""""
 
-To enable logging run the following command:
+Find the directory path for ``sfc.exe`` ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for
+Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be
+``%AMP_InstallDir%VERSION\sfc.exe``. To enable logging run the following command:
 
 .. code::
 
-    "<PathNameWithCiscoAMP>" -l start
+    sfc.exe -l start
 
 Linux
 """""
