@@ -219,7 +219,7 @@ Get Agent GUID
 Windows
 ^^^^^^^
 
-To get the AMP Install Dir go to: ``HKEY_LOCAL_MACHINE\SOFTWARE\Immunet Protect\InstallDir``
+To get the AMP InstallDir check the registry key value of ``HKEY_LOCAL_MACHINE\SOFTWARE\Immunet Protect\InstallDir``.
 
 ``$AMP_InstallDir\local.xml``
 
