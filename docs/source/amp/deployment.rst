@@ -407,6 +407,10 @@ default the uploaded files will be placed in a subfolder under
 approximately 1-250MB of data to the BES Server (through the BES Relays). Depending on network speeds, this could take
 several minutes.
 
+.. NOTE::
+
+    The -o in the following commands is where the support snapshot will be saved.
+
 Windows
 """""""
 
@@ -560,8 +564,8 @@ To clear cache in MacOS run the following commands:
 
     launchctl unload /Library/LaunchDaemons/com.cisco.amp.daemon.plist
     wait rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/cloud_query.cache"
-	wait rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/cloud_nfm_query.cache"
-	wait rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/events.db"
-	wait launchctl load /Library/LaunchDaemons/com.cisco.amp.daemon.plist
+    wait rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/cloud_nfm_query.cache"
+    wait rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/events.db"
+    wait launchctl load /Library/LaunchDaemons/com.cisco.amp.daemon.plist
 
 
