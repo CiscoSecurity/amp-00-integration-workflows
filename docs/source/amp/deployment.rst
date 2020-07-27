@@ -492,8 +492,8 @@ To enable logging run the following commands:
     appendfile #!/bin/sh
     appendfile echo "debuglevel 1" | /opt/cisco/amp/bin/ampcli
     move __appendfile ampdebug.sh
-    wait chmod 555 ampdebug.sh
-    wait "<PathOfClientFolderOfCurrentSiteAnd ampdebug.sh>"
+    chmod 555 ampdebug.sh
+    "<PathOfClientFolderOfCurrentSiteAnd ampdebug.sh>"
 
 MacOS
 """""
@@ -507,8 +507,8 @@ To enable logging run the following commands:
 	appendfile #!/bin/sh
 	appendfile echo "debuglevel 1" | /opt/cisco/amp/ampcli
 	move __appendfile ampdebug.sh
-	wait chmod 555 ampdebug.sh
-	wait "{pathname of client folder of current site & "/ampdebug.sh"}"
+	chmod 555 ampdebug.sh
+	"<PathOfClientFolderOfCurrentSiteAnd ampdebug.sh>"
 
 
 Clear Cache
@@ -539,21 +539,21 @@ To clear cache in CentOS versions 6 and below use the following commands:
 
 .. code::
 
-    wait initctl stop cisco-amp
-    wait rm -f "/opt/cisco/amp/etc/cloud_query.cache"
-    wait rm -f "/opt/cisco/amp/etc/cloud_nfm_query.cache"
-    wait rm -f "/opt/cisco/amp/etc/events.db"
-    wait initctl start cisco-amp
+    initctl stop cisco-amp
+    rm -f "/opt/cisco/amp/etc/cloud_query.cache"
+    rm -f "/opt/cisco/amp/etc/cloud_nfm_query.cache"
+    rm -f "/opt/cisco/amp/etc/events.db"
+    initctl start cisco-amp
 
 To clear cache in CentOS versions 7 and above use the following commands:
 
 .. code::
 
-    wait systemctl stop cisco-amp
-    wait rm -f "/opt/cisco/amp/etc/cloud_query.cache"
-    wait rm -f "/opt/cisco/amp/etc/cloud_nfm_query.cache"
-    wait rm -f "/opt/cisco/amp/etc/events.db"
-    wait systemctl start cisco-amp
+    systemctl stop cisco-amp
+    rm -f "/opt/cisco/amp/etc/cloud_query.cache"
+    rm -f "/opt/cisco/amp/etc/cloud_nfm_query.cache"
+    rm -f "/opt/cisco/amp/etc/events.db"
+    systemctl start cisco-amp
 
 MacOS
 """""
@@ -563,9 +563,9 @@ To clear cache in MacOS run the following commands:
 .. code::
 
     launchctl unload /Library/LaunchDaemons/com.cisco.amp.daemon.plist
-    wait rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/cloud_query.cache"
-    wait rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/cloud_nfm_query.cache"
-    wait rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/events.db"
-    wait launchctl load /Library/LaunchDaemons/com.cisco.amp.daemon.plist
+    rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/cloud_query.cache"
+    rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/cloud_nfm_query.cache"
+    rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/events.db"
+    launchctl load /Library/LaunchDaemons/com.cisco.amp.daemon.plist
 
 
