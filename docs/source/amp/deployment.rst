@@ -241,3 +241,327 @@ Go to here: ``/Library/Application Support/Cisco/AMP for Endpoints Connector/loc
 
 Read the value located here: ``/config/agent/uuid``
 
+Uninstall
+---------
+
+Full Uninstall
+^^^^^^^^^^^^^^
+
+This action will uninstall AMP for Endpoints and remove all data from disk. If you later re-install AMP on the computer
+it will register with a new GUID.
+
+Windows
+"""""""
+
+To remove AMP from Windows please do the following:
+
+1. Find the directory path for uninstall.exe ``%AMP_INSTALL_DIR\%VERSION``.
+2. Navigate to the directory. Here is an example ``C:\Program Files\Cisco\AMP\7.2.7``.
+3. Run the following command:
+
+.. code::
+
+    uninstall.exe /S /full 1 /password <PASSWORD>
+
+Linux
+"""""
+
+To remove AMP from Linux please run these commands:
+
+.. code::
+
+    yum remove ciscoampconnector -y
+    /opt/cisco/amp/bin/purge_amp_local_data
+
+
+MacOS
+"""""
+
+To remove AMP from MacOS please run this command:
+
+.. code::
+
+    installer -pkg "/Applications/Cisco AMP/Uninstall AMP for Endpoints Connector.pkg" -target /
+
+
+
+Uninstall But Leave Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you plan to re-install AMP for Endpoints at a later date you should use this action to leave configuration on the
+disk. This will result in the connector re-registering with the cloud using the same GUID. This capabiliy is not
+available for Mac OS.
+
+Windows
+"""""""
+
+To remove AMP from Windows but leave the configuration please do the following:
+
+1. Find the directory path for uninstall.exe ``%AMP_INSTALL_DIR\%VERSION``.
+2. Navigate to the directory. Here is an example ``C:\Program Files\Cisco\AMP\7.2.7``.
+3. Run the following command:
+
+.. code::
+
+    uninstall.exe /S /full 0 /password <PASSWORD>
+
+Linux
+"""""
+
+To remove AMP from Linux but leave the configuration please run this command:
+
+.. code::
+
+    yum remove ciscoampconnector -y
+
+
+
+Starting and Stopping Agents
+----------------------------
+
+Starting Agents
+^^^^^^^^^^^^^^^
+
+Windows
+"""""""
+
+Start agent with the following command:
+
+.. code::
+
+    cmd.exe /c "net start Cisco AMP for Endpoints Connector 7.2.7"
+
+Linux
+"""""
+
+Start agent in CentOS versions 6 and below:
+
+.. code::
+
+    wait initctl start cisco-amp
+
+Start agent in CentOS versions 7 and above:
+
+.. code::
+
+    wait systemctl start cisco-amp
+
+MacOS
+"""""
+
+Start agent with the following command:
+
+.. code::
+
+    launchctl load /Library/LaunchDaemons/com.cisco.amp.daemon.plist
+
+
+Stopping Agents
+^^^^^^^^^^^^^^^
+
+Windows
+"""""""
+
+Stop agent with the following command by finding the directory path for sfc.exe ``%AMP_INSTALL_DIR\%VERSION``:
+
+.. code::
+
+    <FILE PATH> -k <PASSWORD>
+
+Linux
+"""""
+
+Stop agent in CentOS versions 6 and below:
+
+.. code::
+
+    wait initctl stop cisco-amp
+
+Stop agent in CentOS versions 7 and above:
+
+.. code::
+
+    wait systemctl stop cisco-amp
+
+MacOS
+"""""
+
+Stop agent with the following command:
+
+.. code::
+
+    launchctl unload /Library/LaunchDaemons/com.cisco.amp.daemon.plist
+
+Troubleshooting
+---------------
+
+Support Tools
+^^^^^^^^^^^^^
+
+The AMP Support Tool will create a snapshot of system and AMP settings include AMP logs to be used by Cisco support to
+help diagnose issue with an AMP deployment. You should only need to run this tool at the request of Cisco Support. This
+task allows you to run the AMP Support Tool and upload the results to the BES Server through the BES Upload Manager. By
+default the uploaded files will be placed in a subfolder under
+``C:\Program Files\BigFix Enterprise\BES Server\UploadManagerData\BufferDir\sha1`` on a Windows BES Server or
+``/var/opt/BESServer/UploadManagerData/BufferDir/sha1`` on a Linux BES Server. Each BES Client targeted will upload
+approximately 1-250MB of data to the BES Server (through the BES Relays). Depending on network speeds, this could take
+several minutes.
+
+Windows
+"""""""
+
+Run the following commands:
+
+.. code::
+
+    folder delete "<PathOfClientFolderOfCurrentSite>"
+    folder create "<PathOfClientFolderOfCurrentSite>"
+    concatenation "ipsupporttool" of (substrings separated by "sfc" of (image path of service whose (service name of it as string starts with "CiscoAMP") as string))} -o "<PathOfClientFolderOfCurrentSite>"
+    setting "_BESClient_ArchiveManager_MaxArchiveSize"="262144000" on "<ActionIssueDate>" for client
+    setting "_BESClient_ArchiveManager_OperatingMode"="2" on "<ActionIssueDate>" for client
+    setting "_BESClient_ArchiveManager_FileSet-AMP"="<PathOfClientFolderOfCurrentSite>" on "<ActionIssueDate>" for client
+    archive now
+
+Linux
+"""""
+
+Run the following commands:
+
+.. code::
+
+    folder delete "<PathOfClientFolderOfCurrentSite>"
+    folder create "<PathOfClientFolderOfCurrentSite>"
+    "/opt/cisco/amp/bin/ampsupport" -o "<PathOfClientFolderOfCurrentSite>"
+    setting "_BESClient_ArchiveManager_MaxArchiveSize"="262144000" on "<ActionIssueDate>" for client
+    setting "_BESClient_ArchiveManager_OperatingMode"="2" on "<ActionIssueDate>" for client
+    setting "_BESClient_ArchiveManager_FileSet-AMP"="<PathOfClientFolderOfCurrentSite>" on "<ActionIssueDate>" for client
+    archive now
+
+MacOS
+"""""
+
+Run the following commands:
+
+.. code::
+
+    folder delete "<PathOfClientFolderOfCurrentSite>"
+    folder create "<PathOfClientFolderOfCurrentSite>"
+    /Library/Application Support/Cisco/AMP for Endpoints Connector/SupportTool" -o "<PathOfClientFolderOfCurrentSite>"
+    setting "_BESClient_ArchiveManager_MaxArchiveSize"="262144000" on "<ActionIssueDate>" for client
+    setting "_BESClient_ArchiveManager_OperatingMode"="2" on "<ActionIssueDate>" for client
+    setting "_BESClient_ArchiveManager_FileSet-AMP"="<PathOfClientFolderOfCurrentSite>" on "<ActionIssueDate>" for client
+    archive now
+
+
+Reboot Required
+^^^^^^^^^^^^^^^
+
+To check if AMP needs a Windows Client to Reboot, look for the following registry key:
+``HKEY_LOCAL_MACHINE\SOFTWARE\Immunet Protect\Reboot``. Reboot Windows machines that have a pending reboot caused by
+AMP for Endpoints. Pending reboots can be caused by an upgrade or an uninstallation.
+
+Enable Debug Logging
+^^^^^^^^^^^^^^^^^^^^
+
+.. NOTE::
+
+    Debug logging will automatically turn off after the next policy update.
+
+Windows
+"""""""
+
+To enable logging run the following command:
+
+.. code::
+
+    "<PathNameWithCiscoAMP>" -l start
+
+Linux
+"""""
+
+To enable logging run the following commands:
+
+.. code::
+
+    delete __appendfile
+    delete ampdebug.sh
+    appendfile #!/bin/sh
+    appendfile echo "debuglevel 1" | /opt/cisco/amp/bin/ampcli
+    move __appendfile ampdebug.sh
+    wait chmod 555 ampdebug.sh
+    wait "<PathOfClientFolderOfCurrentSiteAnd ampdebug.sh>"
+
+MacOS
+"""""
+
+To enable logging run the following commands:
+
+.. code::
+
+    delete __appendfile
+	delete ampdebug.sh
+	appendfile #!/bin/sh
+	appendfile echo "debuglevel 1" | /opt/cisco/amp/ampcli
+	move __appendfile ampdebug.sh
+	wait chmod 555 ampdebug.sh
+	wait "{pathname of client folder of current site & "/ampdebug.sh"}"
+
+
+Clear Cache
+^^^^^^^^^^^
+
+Windows
+"""""""
+
+To clear the cache run the following commands and find the directory path for sfc.exe ``%AMP_INSTALL_DIR\%VERSION``:
+
+.. code::
+
+    <FILE PATH> -k <PASSWORD>
+    delete "C:\Program Files\Cisco\AMP\cache.db"
+    delete "C:\Program Files\Cisco\AMP\nfm_cache.db"
+    delete "C:\Program Files\Cisco\AMP\nfm_url_file_map.db"
+    delete "C:\Program Files\Cisco\AMP\event.db"
+    delete "C:\Program Files\Cisco\AMP\jobs.db"
+    delete "C:\Program Files\Cisco\AMP\history.db"
+    delete "C:\Program Files\Cisco\AMP\historyex.db"
+    powershell.exe Start-Service <ServiceNameOfCiscoAMP>
+
+
+Linux
+"""""
+
+To clear cache in CentOS versions 6 and below use the following commands:
+
+.. code::
+
+    wait initctl stop cisco-amp
+    wait rm -f "/opt/cisco/amp/etc/cloud_query.cache"
+    wait rm -f "/opt/cisco/amp/etc/cloud_nfm_query.cache"
+    wait rm -f "/opt/cisco/amp/etc/events.db"
+    wait initctl start cisco-amp
+
+To clear cache in CentOS versions 7 and above use the following commands:
+
+.. code::
+
+    wait systemctl stop cisco-amp
+    wait rm -f "/opt/cisco/amp/etc/cloud_query.cache"
+    wait rm -f "/opt/cisco/amp/etc/cloud_nfm_query.cache"
+    wait rm -f "/opt/cisco/amp/etc/events.db"
+    wait systemctl start cisco-amp
+
+MacOS
+"""""
+
+To clear cache in MacOS run the following commands:
+
+.. code::
+
+    launchctl unload /Library/LaunchDaemons/com.cisco.amp.daemon.plist
+    wait rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/cloud_query.cache"
+	wait rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/cloud_nfm_query.cache"
+	wait rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/events.db"
+	wait launchctl load /Library/LaunchDaemons/com.cisco.amp.daemon.plist
+
+
