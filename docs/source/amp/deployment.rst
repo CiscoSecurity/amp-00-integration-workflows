@@ -54,15 +54,18 @@ When installing on Windows Desktops:
 Deploy Windows AMP for Endpoint and Specify the Installation Parameters
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-To prompt a user for which command line switches they would like to use please see Chapter 3 of Deployment Strategy
-Guide or Chapter 7 of the User Guide `here <https://console.amp.cisco.com/docs>`_ for a list of available command line
-switches.
+For a complete list of command line switches that can be used during installation please see Chapter 3 of Deployment
+Strategy Guide or Chapter 7 of the User Guide `here <https://console.amp.cisco.com/docs>`_. You can then prompt the user
+for the value of each switch.
 
 Upgrade Windows AMP for Endpoints Connector
 """""""""""""""""""""""""""""""""""""""""""
 
-To upgrade the connector please read the command switches used during the previous installation from the following
-local.xml files:
+To upgrade the connector please read the command line switches used during the previous installation from the ``local.xml``:
+
+.. NOTE::
+
+    The ``local.xml`` is found in Cisco AMP install directory which can be found by checking the registry key value of ``HKEY_LOCAL_MACHINE\SOFTWARE\Immunet Protect\InstallDir``.
 
 - ``/config/install/switches/skipdfc``
 - ``/config/install/switches/skiptetra``
