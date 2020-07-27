@@ -338,13 +338,13 @@ Start agent in CentOS versions 6 and below:
 
 .. code::
 
-    wait initctl start cisco-amp
+    initctl start cisco-amp
 
 Start agent in CentOS versions 7 and above:
 
 .. code::
 
-    wait systemctl start cisco-amp
+    systemctl start cisco-amp
 
 MacOS
 """""
@@ -375,13 +375,13 @@ Stop agent in CentOS versions 6 and below:
 
 .. code::
 
-    wait initctl stop cisco-amp
+    initctl stop cisco-amp
 
 Stop agent in CentOS versions 7 and above:
 
 .. code::
 
-    wait systemctl stop cisco-amp
+    systemctl stop cisco-amp
 
 MacOS
 """""
