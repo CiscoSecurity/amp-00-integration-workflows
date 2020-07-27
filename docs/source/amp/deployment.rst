@@ -233,16 +233,12 @@ Read the value located here: ``/config/agent/uuid``
 Linux
 ^^^^^
 
-Go to here: ``/opt/cisco/amp/etc/local.xml``
-
-Read the value located here: ``/config/agent/uuid``
+Read the value of ``/config/agent/uuid`` from ``/opt/cisco/amp/etc/local.xml``.
 
 MacOS
 ^^^^^
 
-Go to here: ``/Library/Application Support/Cisco/AMP for Endpoints Connector/local.xml``
-
-Read the value located here: ``/config/agent/uuid``
+Read the value of ``/config/agent/uuid`` from ``/Library/Application Support/Cisco/AMP for Endpoints Connector/local.xml``.
 
 Uninstall
 ---------
