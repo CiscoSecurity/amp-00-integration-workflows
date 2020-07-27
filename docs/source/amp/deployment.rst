@@ -416,7 +416,7 @@ Run the following commands:
 
     folder delete "<PathOfClientFolderOfCurrentSite>"
     folder create "<PathOfClientFolderOfCurrentSite>"
-    concatenation "ipsupporttool" of (substrings separated by "sfc" of (image path of service whose (service name of it as string starts with "CiscoAMP") as string))} -o "<PathOfClientFolderOfCurrentSite>"
+    "C:\Program Files\Cisco\AMP\7.2.7\ipsupporttool.exe" -o "<PathOfClientFolderOfCurrentSite>"
     setting "_BESClient_ArchiveManager_MaxArchiveSize"="262144000" on "<ActionIssueDate>" for client
     setting "_BESClient_ArchiveManager_OperatingMode"="2" on "<ActionIssueDate>" for client
     setting "_BESClient_ArchiveManager_FileSet-AMP"="<PathOfClientFolderOfCurrentSite>" on "<ActionIssueDate>" for client
