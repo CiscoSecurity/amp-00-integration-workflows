@@ -224,11 +224,9 @@ Windows
 
 To get the AMP InstallDir check the registry key value of ``HKEY_LOCAL_MACHINE\SOFTWARE\Immunet Protect\InstallDir``.
 
-``$AMP_InstallDir\local.xml``
+Read the value of ``/config/agent/uuid`` from ``$AMP_InstallDir\local.xml``.
 
 Default location is: ``C:\Program Files\Cisco\AMP\local.xml``
-
-Read the value located here: ``/config/agent/uuid``
 
 Linux
 ^^^^^
