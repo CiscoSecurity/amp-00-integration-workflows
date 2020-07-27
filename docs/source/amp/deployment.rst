@@ -255,13 +255,18 @@ Windows
 
 To remove AMP from Windows please do the following:
 
-1. Find the directory path for uninstall.exe ``%AMP_INSTALL_DIR\%VERSION``.
+1. Find the directory path for the ``uninstall.exe`` ``%AMP_InstallDir\%VERSION`` by checking the image path of the Cisco AMP for Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be ``%AMP_InstallDir\%VERSION\sfc.exe``.
 2. Navigate to the directory. Here is an example ``C:\Program Files\Cisco\AMP\7.2.7``.
 3. Run the following command:
 
 .. code::
 
     uninstall.exe /S /full 1 /password <PASSWORD>
+
+.. NOTE::
+
+    The ``/password`` switch is only required if a Connector Protection Password is configured. If it is not provided the
+    ``/password`` switch is ignored.
 
 Linux
 """""
@@ -289,7 +294,7 @@ Uninstall But Leave Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you plan to re-install AMP for Endpoints at a later date you should use this action to leave configuration on the
-disk. This will result in the connector re-registering with the cloud using the same GUID. This capabiliy is not
+disk. This will result in the connector re-registering with the cloud using the same GUID. This capability is not
 available for Mac OS.
 
 Windows
@@ -297,13 +302,18 @@ Windows
 
 To remove AMP from Windows but leave the configuration please do the following:
 
-1. Find the directory path for uninstall.exe ``%AMP_INSTALL_DIR\%VERSION``.
+1. Find the directory path for ``uninstall.exe`` ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be ``%AMP_InstallDir%VERSION\sfc.exe``.
 2. Navigate to the directory. Here is an example ``C:\Program Files\Cisco\AMP\7.2.7``.
 3. Run the following command:
 
 .. code::
 
     uninstall.exe /S /full 0 /password <PASSWORD>
+
+.. NOTE::
+
+    The ``/password`` switch is only required if a Connector Protection Password is configured. If it is not provided the
+    ``/password`` switch is ignored.
 
 Linux
 """""
@@ -331,16 +341,20 @@ Start agent with the following command:
 
     cmd.exe /c "net start Cisco AMP for Endpoints Connector 7.2.7"
 
+.. NOTE::
+
+    To get the name of the service check for a Service name that starts with ``CiscoAMP_``.
+
 Linux
 """""
 
-Start agent in CentOS versions 6 and below:
+Start agent in RHEL/CentOS versions 6 and below:
 
 .. code::
 
     initctl start cisco-amp
 
-Start agent in CentOS versions 7 and above:
+Start agent in RHEL/CentOS versions 7 and above:
 
 .. code::
 
@@ -362,22 +376,26 @@ Stopping Agents
 Windows
 """""""
 
-Stop agent with the following command by finding the directory path for sfc.exe ``%AMP_INSTALL_DIR\%VERSION``:
+Stop agent with the following command by finding the directory path for ``sfc.exe`` ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for Endpoints process:
 
 .. code::
 
     <FILE PATH> -k <PASSWORD>
 
+.. NOTE::
+
+    The ``-k`` switch is only required if a Connector Protection Password is configured. If it is not provided the ``-k`` switch is ignored.
+
 Linux
 """""
 
-Stop agent in CentOS versions 6 and below:
+Stop agent in RHEL/CentOS versions 6 and below:
 
 .. code::
 
     initctl stop cisco-amp
 
-Stop agent in CentOS versions 7 and above:
+Stop agent in RHEL/CentOS versions 7 and above:
 
 .. code::
 
@@ -399,63 +417,40 @@ Support Tools
 ^^^^^^^^^^^^^
 
 The AMP Support Tool will create a snapshot of system and AMP settings include AMP logs to be used by Cisco support to
-help diagnose issue with an AMP deployment. You should only need to run this tool at the request of Cisco Support. This
-task allows you to run the AMP Support Tool and upload the results to the BES Server through the BES Upload Manager. By
-default the uploaded files will be placed in a subfolder under
-``C:\Program Files\BigFix Enterprise\BES Server\UploadManagerData\BufferDir\sha1`` on a Windows BES Server or
-``/var/opt/BESServer/UploadManagerData/BufferDir/sha1`` on a Linux BES Server. Each BES Client targeted will upload
-approximately 1-250MB of data to the BES Server (through the BES Relays). Depending on network speeds, this could take
-several minutes.
+help diagnose issue with an AMP deployment. You should only need to run this tool at the request of Cisco Support.
 
 .. NOTE::
 
-    The -o in the following commands is where the support snapshot will be saved.
+    The ``-o`` in the following commands is where the support snapshot will be saved.
 
 Windows
 """""""
 
-Run the following commands:
+Find the directory path for ``ipsupporttool.exe`` ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for
+Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be ``%AMP_InstallDir%VERSION\sfc.exe``.
+Then run the following command:
 
 .. code::
 
-    folder delete "<PathOfClientFolderOfCurrentSite>"
-    folder create "<PathOfClientFolderOfCurrentSite>"
     "C:\Program Files\Cisco\AMP\7.2.7\ipsupporttool.exe" -o "<PathOfClientFolderOfCurrentSite>"
-    setting "_BESClient_ArchiveManager_MaxArchiveSize"="262144000" on "<ActionIssueDate>" for client
-    setting "_BESClient_ArchiveManager_OperatingMode"="2" on "<ActionIssueDate>" for client
-    setting "_BESClient_ArchiveManager_FileSet-AMP"="<PathOfClientFolderOfCurrentSite>" on "<ActionIssueDate>" for client
-    archive now
 
 Linux
 """""
 
-Run the following commands:
+Run the following command:
 
 .. code::
 
-    folder delete "<PathOfClientFolderOfCurrentSite>"
-    folder create "<PathOfClientFolderOfCurrentSite>"
     "/opt/cisco/amp/bin/ampsupport" -o "<PathOfClientFolderOfCurrentSite>"
-    setting "_BESClient_ArchiveManager_MaxArchiveSize"="262144000" on "<ActionIssueDate>" for client
-    setting "_BESClient_ArchiveManager_OperatingMode"="2" on "<ActionIssueDate>" for client
-    setting "_BESClient_ArchiveManager_FileSet-AMP"="<PathOfClientFolderOfCurrentSite>" on "<ActionIssueDate>" for client
-    archive now
 
 MacOS
 """""
 
-Run the following commands:
+Run the following command:
 
 .. code::
 
-    folder delete "<PathOfClientFolderOfCurrentSite>"
-    folder create "<PathOfClientFolderOfCurrentSite>"
     /Library/Application Support/Cisco/AMP for Endpoints Connector/SupportTool" -o "<PathOfClientFolderOfCurrentSite>"
-    setting "_BESClient_ArchiveManager_MaxArchiveSize"="262144000" on "<ActionIssueDate>" for client
-    setting "_BESClient_ArchiveManager_OperatingMode"="2" on "<ActionIssueDate>" for client
-    setting "_BESClient_ArchiveManager_FileSet-AMP"="<PathOfClientFolderOfCurrentSite>" on "<ActionIssueDate>" for client
-    archive now
-
 
 Reboot Required
 ^^^^^^^^^^^^^^^
@@ -483,17 +478,11 @@ To enable logging run the following command:
 Linux
 """""
 
-To enable logging run the following commands:
+To enable logging run the following command:
 
 .. code::
 
-    delete __appendfile
-    delete ampdebug.sh
-    appendfile #!/bin/sh
-    appendfile echo "debuglevel 1" | /opt/cisco/amp/bin/ampcli
-    move __appendfile ampdebug.sh
-    chmod 555 ampdebug.sh
-    "<PathOfClientFolderOfCurrentSiteAnd ampdebug.sh>"
+    echo "debuglevel 1" | /opt/cisco/amp/bin/ampcli
 
 MacOS
 """""
@@ -502,13 +491,7 @@ To enable logging run the following commands:
 
 .. code::
 
-    delete __appendfile
-	delete ampdebug.sh
-	appendfile #!/bin/sh
-	appendfile echo "debuglevel 1" | /opt/cisco/amp/ampcli
-	move __appendfile ampdebug.sh
-	chmod 555 ampdebug.sh
-	"<PathOfClientFolderOfCurrentSiteAnd ampdebug.sh>"
+	echo "debuglevel 1" | /opt/cisco/amp/ampcli
 
 
 Clear Cache
@@ -517,11 +500,25 @@ Clear Cache
 Windows
 """""""
 
-To clear the cache run the following commands and find the directory path for sfc.exe ``%AMP_INSTALL_DIR\%VERSION``:
+Find the directory path for sfc.exe ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for
+Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be
+``%AMP_InstallDir%VERSION\sfc.exe``. To clear the cache run the following commands:
+
+.. NOTE::
+
+    You can get the Cisco AMP install directory by checking the registry key value of ``HKEY_LOCAL_MACHINE\SOFTWARE\Immunet Protect\InstallDir``.
+
+.. NOTE::
+
+    The ``-k`` switch is only required if a Connector Protection Password is configured. If no is provided the ``-k`` switch is ignored.
+
+.. NOTE::
+
+    To get the name of the service check for a Service name that starts with ``CiscoAMP_``.
 
 .. code::
 
-    <FILE PATH> -k <PASSWORD>
+    sfc.exe -k <PASSWORD>
     delete "C:\Program Files\Cisco\AMP\cache.db"
     delete "C:\Program Files\Cisco\AMP\nfm_cache.db"
     delete "C:\Program Files\Cisco\AMP\nfm_url_file_map.db"
@@ -535,7 +532,7 @@ To clear the cache run the following commands and find the directory path for sf
 Linux
 """""
 
-To clear cache in CentOS versions 6 and below use the following commands:
+To clear cache in RHEL/CentOS versions 6 and below use the following commands:
 
 .. code::
 
@@ -545,7 +542,7 @@ To clear cache in CentOS versions 6 and below use the following commands:
     rm -f "/opt/cisco/amp/etc/events.db"
     initctl start cisco-amp
 
-To clear cache in CentOS versions 7 and above use the following commands:
+To clear cache in RHEL/CentOS versions 7 and above use the following commands:
 
 .. code::
 
