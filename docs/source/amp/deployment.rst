@@ -19,7 +19,7 @@ Windows
     - /skiptetra 1: Skip installation of the TETRA driver.
     - /skipdfc 1: Skip installation of the DFC driver.
 
-    ``/skiptetra`` and ``/skipdfc`` are both binary switches where 0 is false/off and 1 is true/on.
+    ``/skiptetra`` and ``/skipdfc`` are both binary switches where 0 is false/off and 1 is true/on. This logic applies to any command switch, as detailed in the documentation below.
 
     For more information please see Chapter 3 of Deployment Strategy Guide or Chapter 7 of the User Guide `here <https://console.amp.cisco.com/docs>`_.
 
