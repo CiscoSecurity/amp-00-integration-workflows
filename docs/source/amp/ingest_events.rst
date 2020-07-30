@@ -69,7 +69,7 @@ Customers can delete an Event Stream using the following `request <https://api-d
 
 .. http:example::
 
-    DELETE https://api.amp.cisco.com/v1/event_streams{:id} HTTP/1.1
+    DELETE https://api.amp.cisco.com/v1/event_streams/{:id} HTTP/1.1
     Authorization: Basic MTIzNDphdGVzdA==
 
 `Example Delete Stream Script <https://github.com/CiscoSecurity/amp-04-delete-event-stream>`_

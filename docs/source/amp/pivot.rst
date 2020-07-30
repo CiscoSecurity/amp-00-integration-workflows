@@ -44,7 +44,7 @@ Example with IP Address:
 
 .. NOTE::
 
-    Can be the IP address of a computer or the IP address that was observed as part of a connection.
+    Can be the IP address of a computer or an IP address that was observed as part of a connection.
 
 .. code::
 
@@ -158,7 +158,7 @@ Example for the Detection Name from the last 30 days:
 
 .. code::
 
-    https://console.amp.cisco.com/dashboard/overview#/events/show/{"filters":{"agg":[],"time":"all","tid":[],"det_name":["DetectionName"]},"sort_by":"ts","sort_order":"desc","name":""}
+    https://console.amp.cisco.com/dashboard/overview#/events/show/{"filters":{"agg":[],"time":"all","tid":[],"det_name":["W32.File.MalParent%22"]},"sort_by":"ts","sort_order":"desc","name":""}
 
 Pivoting to File Trajectory
 ---------------------------
