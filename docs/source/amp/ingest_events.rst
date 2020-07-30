@@ -19,6 +19,10 @@ generated they will be consumed immediately. If queried on an interval the event
 consumed. When the client connects it will consume all of the events in the queue and then close the connection. Events
 will sit in the queue for 10 days maximum, at which point they will be deleted.
 
+An event can only be consumed by a single consumer. If multiple consumers are connected to the same event stream, the
+events will be divided between them in no particular order. It is not recommended to have more than one consumer
+connected to a given event stream.
+
 Create Stream
 ^^^^^^^^^^^^^
 
@@ -28,11 +32,16 @@ Customers must create an Event Stream using the following `request <https://api-
 
     POST /v1/event_streams
 
+.. http:example::
+
+    POST https://api.amp.cisco.com/v1/event_streams HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
+
 They have the options of specifying which `event types <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Fevent_types&api_host=api.amp.cisco.com&api_resource=Event+Type&api_version=v1>`_
 they would like in the stream as well as which `groups <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Fgroups&api_host=api.amp.cisco.com&api_resource=Group&api_version=v1>`_
 they would like to receive events from. Organizations are limited to a maximum of 5 event streams.
 
-The credentials for an event stream are only provided at time of creation. if they are not stored at this point in time
+The credentials for an event stream are only provided at time of creation. If they are not stored at this point in time
 there is no ability to retrieve or reset the credentials for the stream. The stream will have to be deleted and a new
 stream with the same settings will have to be created.
 
@@ -44,7 +53,9 @@ stream with the same settings will have to be created.
 Connect to Stream
 ^^^^^^^^^^^^^^^^^
 
-Information on how to use Pika to connect to a stream can be found in the example below.
+Any AMQP 0.9.1 client can be used to connect to the stream. You can find an example in Ruby in the API documentation
+`here <https://api-docs.amp.cisco.com/api_actions/details?api_action=POST+%2Fv1%2Fevent_streams&api_host=api.amp.cisco.com&api_resource=EventStream&api_version=v1>`_.
+There is an example implementation in Python using Pika to connect to a stream that can be found in the example below:
 
 `Example Stream Consumer <https://github.com/Cisco-AMP/pika_bootstrap>`_
 
@@ -56,21 +67,42 @@ Customers can delete an Event Stream using the following `request <https://api-d
 
     DELETE /v1/event_streams/{:id}
 
+.. http:example::
+
+    DELETE https://api.amp.cisco.com/v1/event_streams{:id} HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
+
 `Example Delete Stream Script <https://github.com/CiscoSecurity/amp-04-delete-event-stream>`_
 
 Correlating Events
 ------------------
 
-There can be three different types of events that can all have the same ``detection_id`` for the same detection. These
-events are Threat Detected, Threat Quarantine, and Quarantine Failure events. Similarly, the ``detection_id`` can be the
-same for all detections in Cloud Recall Quarantine Successful and Cloud Recall Detection events. The integration should
-combine Threat Quarantine and Threat Detected events based on the ``.data[].detection_id`` field.
-The value is returned as a string. This makes for a much better user experience as it allows to the user to
-differentiate between a quarantined threat that poses a less immediate risk and a threat that may still be on the
-machine. Not all products have the capacity to implement this. In AMP for Endpoints a Quarantine event (success or
-failure) should be associated with a Threat Detected event. The UI will combine these into a single event making it easy
-for users to see which things to focus on. In the API these events are separated. To correlate Threat Detected with
-Quarantined actions you have to track ``.data[].detection_id``.
+In the AMP for Endpoints UI a Quarantine event (success or failure) is correlated with a Threat Detected event. The UI
+combines these into a single event making it easy for users to see which things to focus on. In the API these events are
+separated. To correlate Threat Detected with Quarantined actions you have to track ``.data[].detection_id``. The value
+is returned as a string.
+
+Correlating these events together makes for a much better user experience as it allows to the user to differentiate
+between a quarantined threat that poses a less immediate risk and a threat that may still be on the machine. There are
+multiple event types that can all have the same ``detection_id`` for a detection. Examples of these events are:
+
++-------------------------------------+---------------+
+| Event Name                          | Event Type ID |
++-------------------------------------+---------------+
+| Threat Detected                     | 1090519054    |
++-------------------------------------+---------------+
+| Threat Quarantined                  | 553648143     |
++-------------------------------------+---------------+
+| Quarantine Failure                  | 2164260880    |
++-------------------------------------+---------------+
+| Cloud Recall Detection              | 553648147     |
++-------------------------------------+---------------+
+| Cloud Recall Quarantine Successful  | 553648155     |
++-------------------------------------+---------------+
+
+The integration should combine these events events based on the ``.data[].detection_id`` field.  It is possible for a
+single detection to have a Threat Detected, Threat Quarantine, and a Quarantine Failure. These events may be returned in
+the API in any order.
 
 The following event JSON shows the correlation of the ``detection_id`` value of 6533241145273614338:
 
@@ -173,6 +205,9 @@ The following event JSON shows the correlation of the ``detection_id`` value of 
 
 Grouping Events
 ---------------
+
+When creating incidents from AMP for Endpoints events, grouping the events that occur within a defined time period helps
+reduce alert fatigue. Here are three common scenarios that can be used to group events.
 
 Same Detection (Hash) on Multiple Endpoints in N Time Period
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

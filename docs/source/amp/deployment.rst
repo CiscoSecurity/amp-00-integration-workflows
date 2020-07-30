@@ -23,8 +23,8 @@ Windows
 
     For more information please see Chapter 3 of Deployment Strategy Guide or Chapter 7 of the User Guide `here <https://console.amp.cisco.com/docs>`_.
 
-Deploy Windows AMP for Endpoint With Default Switches
-"""""""""""""""""""""""""""""""""""""""""""""""""""""
+Deploy Windows AMP for Endpoint
+"""""""""""""""""""""""""""""""
 
 When installing on a Windows Server/Domain Controller:
 
@@ -63,7 +63,8 @@ for the value of each switch.
 Upgrade Windows AMP for Endpoints Connector
 """""""""""""""""""""""""""""""""""""""""""
 
-To upgrade the connector please read the command line switches used during the previous installation from the ``local.xml``:
+To upgrade the connector keeping the deployment settings you must read the command line switches used during the
+previous installation from the ``local.xml``:
 
 .. NOTE::
 
@@ -77,7 +78,7 @@ To upgrade the connector please read the command line switches used during the p
 - ``/config/install/switches/contextmenu``
 - ``/config/install/switches/overridepolicy``
 
-Read the command switches used during the previous installation from the local.xml. For example if the local.xml contained:
+For example if the ``local.xml`` contained:
 
 .. code::
 
@@ -185,8 +186,8 @@ To confirm installation was successful look for a service that contains the stri
 Connector Status
 """"""""""""""""
 
-To find the connector version and connector state for Windows computers with the AMP for Endpoints connector you first
-check the version of a service that contains ``CiscoAMP``. Then, you check if a running service contains ``CiscoAMP``.
+To find the connector state and version for Windows computers check for a running service that contains ``CiscoAMP``.
+If a service exists you can then check the version of the service.
 
 Linux
 ^^^^^
@@ -194,14 +195,14 @@ Linux
 Installation Status
 """""""""""""""""""
 
-To check if the AMP connector is installed check for the following file ``/opt/cisco/amp/bin/ampdaemon``.
+To confirm if the AMP connector is installed check for the following file ``/opt/cisco/amp/bin/ampdaemon``.
 
 Connector Status
 """"""""""""""""
 
-To find the connector version and connector state for Linux computers with the AMP for Endpoints connector you first
-check ``/opt/cisco/amp/etc/global.xml`` for the version. Then, see if the service is running under a process named
-``ampdaemon``.
+To find the connector state and version for Linux computers with the AMP for Endpoints connector you first check if
+there is a running process named ``ampdaemon``. To get the version read the value of ``/Signature/Object/config/agent/version``
+from ``/opt/cisco/amp/etc/global.xml``.
 
 MacOS
 ^^^^^
@@ -214,9 +215,9 @@ To check if the AMP connector is installed check for the following file ``/opt/c
 Connector Status
 """"""""""""""""
 
-To find the connector version and connector state for MacOS computers with the AMP for Endpoints connector you first
-check ``/opt/cisco/amp/global.xml`` for the version. Then, see if the service is running under a process named
-``ampdaemon``.
+To find the connector state and version for MacOS computers with the AMP for Endpoints connector you first check if
+there is a running process named ``ampdaemon``. To get the version read the value of ``/Signature/Object/config/agent/version``
+from ``/opt/cisco/amp/etc/global.xml``.
 
 Get Agent GUID
 --------------
@@ -334,15 +335,26 @@ Starting Agents
 Windows
 """""""
 
-Start agent with the following command:
+Start agent with the ``net start`` and the Cisco AMP Service display name:
 
 .. code::
 
     cmd.exe /c "net start Cisco AMP for Endpoints Connector 7.2.7"
 
+Or start agent with ``powershell`` and the Cisco AMP Service name:
+
+.. code::
+
+    powershell.exe Start-Service CiscoAMP_7.2.7
+
 .. NOTE::
 
     To get the name of the service check for a Service name that starts with ``CiscoAMP_``.
+
+.. NOTE::
+
+    The Service name and Display name will both change based on the version number installed.
+
 
 Linux
 """""
@@ -382,11 +394,11 @@ Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image pat
 
 .. code::
 
-    <FILE PATH> -k <PASSWORD>
+    sfc.exe -k <PASSWORD>
 
 .. NOTE::
 
-    The ``-k`` switch is only required if a Connector Protection Password is configured. If it is not provided the ``-k`` switch is ignored.
+    The ``<PASSWORD>`` parameter is only required if a Connector Protection Password is configured.
 
 Linux
 """""
@@ -514,7 +526,7 @@ Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image pat
 
 .. NOTE::
 
-    The ``-k`` switch is only required if a Connector Protection Password is configured. If no is provided the ``-k`` switch is ignored.
+    The ``<PASSWORD>`` parameter is only required if a Connector Protection Password is configured.
 
 .. NOTE::
 
