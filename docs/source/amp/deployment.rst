@@ -19,10 +19,12 @@ Windows
     - /skiptetra 1: Skip installation of the TETRA driver.
     - /skipdfc 1: Skip installation of the DFC driver.
 
+    ``/skiptetra`` and ``/skipdfc`` are both binary switches where 0 is false/off and 1 is true/on. This logic applies to any command switch, as detailed in the documentation below.
+
     For more information please see Chapter 3 of Deployment Strategy Guide or Chapter 7 of the User Guide `here <https://console.amp.cisco.com/docs>`_.
 
-Deploy Windows AMP for Endpoint With Default Switches
-"""""""""""""""""""""""""""""""""""""""""""""""""""""
+Deploy Windows AMP for Endpoint
+"""""""""""""""""""""""""""""""
 
 When installing on a Windows Server/Domain Controller:
 
@@ -54,15 +56,19 @@ When installing on Windows Desktops:
 Deploy Windows AMP for Endpoint and Specify the Installation Parameters
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-To prompt a user for which command line switches they would like to use please see Chapter 3 of Deployment Strategy
-Guide or Chapter 7 of the User Guide `here <https://console.amp.cisco.com/docs>`_ for a list of available command line
-switches.
+For a complete list of command line switches that can be used during installation please see Chapter 3 of Deployment
+Strategy Guide or Chapter 7 of the User Guide `here <https://console.amp.cisco.com/docs>`_. You can then prompt the user
+for the value of each switch.
 
 Upgrade Windows AMP for Endpoints Connector
 """""""""""""""""""""""""""""""""""""""""""
 
-To upgrade the connector please read the command switches used during the previous installation from the following
-local.xml files:
+To upgrade the connector keeping the deployment settings you must read the command line switches used during the
+previous installation from the ``local.xml``:
+
+.. NOTE::
+
+    The ``local.xml`` is found in Cisco AMP install directory which can be found by checking the registry key value of ``HKEY_LOCAL_MACHINE\SOFTWARE\Immunet Protect\InstallDir``.
 
 - ``/config/install/switches/skipdfc``
 - ``/config/install/switches/skiptetra``
@@ -72,7 +78,7 @@ local.xml files:
 - ``/config/install/switches/contextmenu``
 - ``/config/install/switches/overridepolicy``
 
-Read the command switches used during the previous installation from the local.xml. For example if the local.xml contained:
+For example if the ``local.xml`` contained:
 
 .. code::
 
@@ -180,8 +186,8 @@ To confirm installation was successful look for a service that contains the stri
 Connector Status
 """"""""""""""""
 
-To find the connector version and connector state for Windows computers with the AMP for Endpoints connector you first
-check the version of a service that contains ``CiscoAMP``. Then, you check if a running service contains ``CiscoAMP``.
+To find the connector state and version for Windows computers check for a running service that contains ``CiscoAMP``.
+If a service exists you can then check the version of the service.
 
 Linux
 ^^^^^
@@ -189,14 +195,14 @@ Linux
 Installation Status
 """""""""""""""""""
 
-To check if the AMP connector is installed check for the following file ``/opt/cisco/amp/bin/ampdaemon``.
+To confirm if the AMP connector is installed check for the following file ``/opt/cisco/amp/bin/ampdaemon``.
 
 Connector Status
 """"""""""""""""
 
-To find the connector version and connector state for Linux computers with the AMP for Endpoints connector you first
-check ``/opt/cisco/amp/etc/global.xml`` for the version. Then, see if the service is running under a process named
-``ampdaemon``.
+To find the connector state and version for Linux computers with the AMP for Endpoints connector you first check if
+there is a running process named ``ampdaemon``. To get the version read the value of ``/Signature/Object/config/agent/version``
+from ``/opt/cisco/amp/etc/global.xml``.
 
 MacOS
 ^^^^^
@@ -209,9 +215,9 @@ To check if the AMP connector is installed check for the following file ``/opt/c
 Connector Status
 """"""""""""""""
 
-To find the connector version and connector state for MacOS computers with the AMP for Endpoints connector you first
-check ``/opt/cisco/amp/global.xml`` for the version. Then, see if the service is running under a process named
-``ampdaemon``.
+To find the connector state and version for MacOS computers with the AMP for Endpoints connector you first check if
+there is a running process named ``ampdaemon``. To get the version read the value of ``/Signature/Object/config/agent/version``
+from ``/opt/cisco/amp/etc/global.xml``.
 
 Get Agent GUID
 --------------
@@ -219,25 +225,360 @@ Get Agent GUID
 Windows
 ^^^^^^^
 
-To get the AMP Install Dir go to: ``HKEY_LOCAL_MACHINE\SOFTWARE\Immunet Protect\InstallDir``
+To get the AMP InstallDir check the registry key value of ``HKEY_LOCAL_MACHINE\SOFTWARE\Immunet Protect\InstallDir``.
 
-``$AMP_InstallDir\local.xml``
+Read the value of ``/config/agent/uuid`` from ``$AMP_InstallDir\local.xml``.
 
 Default location is: ``C:\Program Files\Cisco\AMP\local.xml``
-
-Read the value located here: ``/config/agent/uuid``
 
 Linux
 ^^^^^
 
-Go to here: ``/opt/cisco/amp/etc/local.xml``
-
-Read the value located here: ``/config/agent/uuid``
+Read the value of ``/config/agent/uuid`` from ``/opt/cisco/amp/etc/local.xml``.
 
 MacOS
 ^^^^^
 
-Go to here: ``/Library/Application Support/Cisco/AMP for Endpoints Connector/local.xml``
+Read the value of ``/config/agent/uuid`` from ``/Library/Application Support/Cisco/AMP for Endpoints Connector/local.xml``.
 
-Read the value located here: ``/config/agent/uuid``
+Uninstall
+---------
+
+Full Uninstall
+^^^^^^^^^^^^^^
+
+This action will uninstall AMP for Endpoints and remove all data from disk. If you later re-install AMP on the computer
+it will register with a new GUID.
+
+Windows
+"""""""
+
+To remove AMP from Windows please do the following:
+
+1. Find the directory path for the ``uninstall.exe`` ``%AMP_InstallDir\%VERSION`` by checking the image path of the Cisco AMP for Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be ``%AMP_InstallDir\%VERSION\sfc.exe``.
+2. Navigate to the directory. Here is an example ``C:\Program Files\Cisco\AMP\7.2.7``.
+3. Run the following command:
+
+.. code::
+
+    uninstall.exe /S /full 1 /password <PASSWORD>
+
+.. NOTE::
+
+    The ``/password`` switch is only required if a Connector Protection Password is configured. If it is not provided the
+    ``/password`` switch is ignored.
+
+Linux
+"""""
+
+To remove AMP from Linux please run these commands:
+
+.. code::
+
+    yum remove ciscoampconnector -y
+    /opt/cisco/amp/bin/purge_amp_local_data
+
+
+MacOS
+"""""
+
+To remove AMP from MacOS please run this command:
+
+.. code::
+
+    installer -pkg "/Applications/Cisco AMP/Uninstall AMP for Endpoints Connector.pkg" -target /
+
+
+
+Uninstall But Leave Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you plan to re-install AMP for Endpoints at a later date you should use this action to leave configuration on the
+disk. This will result in the connector re-registering with the cloud using the same GUID. This capability is not
+available for Mac OS.
+
+Windows
+"""""""
+
+To remove AMP from Windows but leave the configuration please do the following:
+
+1. Find the directory path for ``uninstall.exe`` ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be ``%AMP_InstallDir%VERSION\sfc.exe``.
+2. Navigate to the directory. Here is an example ``C:\Program Files\Cisco\AMP\7.2.7``.
+3. Run the following command:
+
+.. code::
+
+    uninstall.exe /S /full 0 /password <PASSWORD>
+
+.. NOTE::
+
+    The ``/password`` switch is only required if a Connector Protection Password is configured. If it is not provided the
+    ``/password`` switch is ignored.
+
+Linux
+"""""
+
+To remove AMP from Linux but leave the configuration please run this command:
+
+.. code::
+
+    yum remove ciscoampconnector -y
+
+
+
+Starting and Stopping Agents
+----------------------------
+
+Starting Agents
+^^^^^^^^^^^^^^^
+
+Windows
+"""""""
+
+Start agent with the ``net start`` and the Cisco AMP Service display name:
+
+.. code::
+
+    cmd.exe /c "net start Cisco AMP for Endpoints Connector 7.2.7"
+
+Or start agent with ``powershell`` and the Cisco AMP Service name:
+
+.. code::
+
+    powershell.exe Start-Service CiscoAMP_7.2.7
+
+.. NOTE::
+
+    To get the name of the service check for a Service name that starts with ``CiscoAMP_``.
+
+.. NOTE::
+
+    The Service name and Display name will both change based on the version number installed.
+
+
+Linux
+"""""
+
+Start agent in RHEL/CentOS versions 6 and below:
+
+.. code::
+
+    initctl start cisco-amp
+
+Start agent in RHEL/CentOS versions 7 and above:
+
+.. code::
+
+    systemctl start cisco-amp
+
+MacOS
+"""""
+
+Start agent with the following command:
+
+.. code::
+
+    launchctl load /Library/LaunchDaemons/com.cisco.amp.daemon.plist
+
+
+Stopping Agents
+^^^^^^^^^^^^^^^
+
+Windows
+"""""""
+
+Find the directory path for sfc.exe ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for
+Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be
+``%AMP_InstallDir%VERSION\sfc.exe``. To stop the agent run the following command:
+
+
+.. code::
+
+    sfc.exe -k <PASSWORD>
+
+.. NOTE::
+
+    The ``<PASSWORD>`` parameter is only required if a Connector Protection Password is configured.
+
+Linux
+"""""
+
+Stop agent in RHEL/CentOS versions 6 and below:
+
+.. code::
+
+    initctl stop cisco-amp
+
+Stop agent in RHEL/CentOS versions 7 and above:
+
+.. code::
+
+    systemctl stop cisco-amp
+
+MacOS
+"""""
+
+Stop agent with the following command:
+
+.. code::
+
+    launchctl unload /Library/LaunchDaemons/com.cisco.amp.daemon.plist
+
+Troubleshooting
+---------------
+
+Support Tools
+^^^^^^^^^^^^^
+
+The AMP Support Tool will create a snapshot of system and AMP settings include AMP logs to be used by Cisco support to
+help diagnose issue with an AMP deployment. You should only need to run this tool at the request of Cisco Support.
+
+.. NOTE::
+
+    The ``-o`` in the following commands is where the support snapshot will be saved.
+
+Windows
+"""""""
+
+Find the directory path for ``ipsupporttool.exe`` ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for
+Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be ``%AMP_InstallDir%VERSION\sfc.exe``.
+Then run the following command:
+
+.. code::
+
+    "C:\Program Files\Cisco\AMP\7.2.7\ipsupporttool.exe" -o "<DesiredOutputDirectory>"
+
+Linux
+"""""
+
+Run the following command:
+
+.. code::
+
+    "/opt/cisco/amp/bin/ampsupport" -o "<DesiredOutputDirectory>"
+
+MacOS
+"""""
+
+Run the following command:
+
+.. code::
+
+    /Library/Application Support/Cisco/AMP for Endpoints Connector/SupportTool" -o "<DesiredOutputDirectory>"
+
+Reboot Required
+^^^^^^^^^^^^^^^
+
+To check if AMP needs a Windows Client to Reboot, look for the following registry key:
+``HKEY_LOCAL_MACHINE\SOFTWARE\Immunet Protect\Reboot``. Reboot Windows machines that have a pending reboot caused by
+AMP for Endpoints. Pending reboots can be caused by an upgrade or an uninstallation.
+
+Enable Debug Logging
+^^^^^^^^^^^^^^^^^^^^
+
+.. NOTE::
+
+    Debug logging will automatically turn off after the next policy update.
+
+Windows
+"""""""
+
+Find the directory path for ``sfc.exe`` ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for
+Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be
+``%AMP_InstallDir%VERSION\sfc.exe``. To enable logging run the following command:
+
+.. code::
+
+    sfc.exe -l start
+
+Linux
+"""""
+
+To enable logging run the following command:
+
+.. code::
+
+    echo "debuglevel 1" | /opt/cisco/amp/bin/ampcli
+
+MacOS
+"""""
+
+To enable logging run the following commands:
+
+.. code::
+
+	echo "debuglevel 1" | /opt/cisco/amp/ampcli
+
+
+Clear Cache
+^^^^^^^^^^^
+
+Windows
+"""""""
+
+Find the directory path for sfc.exe ``%AMP_InstallDir%VERSION`` by checking the image path of the Cisco AMP for
+Endpoints process. The Service name will be ``CiscoAMP_%VERSION``. The image path will be
+``%AMP_InstallDir%VERSION\sfc.exe``. To clear the cache run the following commands:
+
+.. NOTE::
+
+    You can get the Cisco AMP install directory by checking the registry key value of ``HKEY_LOCAL_MACHINE\SOFTWARE\Immunet Protect\InstallDir``.
+
+.. NOTE::
+
+    The ``<PASSWORD>`` parameter is only required if a Connector Protection Password is configured.
+
+.. NOTE::
+
+    To get the name of the service check for a Service name that starts with ``CiscoAMP_``.
+
+.. code::
+
+    sfc.exe -k <PASSWORD>
+    delete "C:\Program Files\Cisco\AMP\cache.db"
+    delete "C:\Program Files\Cisco\AMP\nfm_cache.db"
+    delete "C:\Program Files\Cisco\AMP\nfm_url_file_map.db"
+    delete "C:\Program Files\Cisco\AMP\event.db"
+    delete "C:\Program Files\Cisco\AMP\jobs.db"
+    delete "C:\Program Files\Cisco\AMP\history.db"
+    delete "C:\Program Files\Cisco\AMP\historyex.db"
+    powershell.exe Start-Service <ServiceNameOfCiscoAMP>
+
+
+Linux
+"""""
+
+To clear cache in RHEL/CentOS versions 6 and below use the following commands:
+
+.. code::
+
+    initctl stop cisco-amp
+    rm -f "/opt/cisco/amp/etc/cloud_query.cache"
+    rm -f "/opt/cisco/amp/etc/cloud_nfm_query.cache"
+    rm -f "/opt/cisco/amp/etc/events.db"
+    initctl start cisco-amp
+
+To clear cache in RHEL/CentOS versions 7 and above use the following commands:
+
+.. code::
+
+    systemctl stop cisco-amp
+    rm -f "/opt/cisco/amp/etc/cloud_query.cache"
+    rm -f "/opt/cisco/amp/etc/cloud_nfm_query.cache"
+    rm -f "/opt/cisco/amp/etc/events.db"
+    systemctl start cisco-amp
+
+MacOS
+"""""
+
+To clear cache in MacOS run the following commands:
+
+.. code::
+
+    launchctl unload /Library/LaunchDaemons/com.cisco.amp.daemon.plist
+    rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/cloud_query.cache"
+    rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/cloud_nfm_query.cache"
+    rm -f "/Library/Application Support/Cisco/AMP for Endpoints Connector/events.db"
+    launchctl load /Library/LaunchDaemons/com.cisco.amp.daemon.plist
+
 

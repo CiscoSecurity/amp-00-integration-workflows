@@ -18,11 +18,21 @@ computer you would follow these steps:
 
         GET /v1/computers/{:connector_guid}/trajectory
 
+    .. http:example::
+
+        GET https://api.amp.cisco.com/v1/computers/{:connector_guid}/trajectory HTTP/1.1
+        Authorization: Basic MTIzNDphdGVzdA==
+
     An example request:
 
     .. code::
 
         GET /v1/computers/d821e2d9-9280-489c-a6c3-be02d85ba8a0/trajectory
+
+    .. http:example::
+
+        GET https://api.amp.cisco.com/v1/computers/d821e2d9-9280-489c-a6c3-be02d85ba8a0/trajectory HTTP/1.1
+        Authorization: Basic MTIzNDphdGVzdA==
 
     An example response:
 
@@ -128,7 +138,6 @@ computer you would follow these steps:
           }
         }
 
-
 2. Next, you would parse the response for ``.data.events[].file.identity.sha256`` and ``.data.events[].file.parent.identity.sha256``.
 3. You would then evaluate these hashes with your product or a 3rd party observable service.
 
@@ -143,11 +152,21 @@ To hunt for computers that have seen a SHA-256 but have not created an event for
 
         GET /v1/computers/activity
 
+    .. http:example::
+
+        GET https://api.amp.cisco.com/v1/computers/activity HTTP/1.1
+        Authorization: Basic MTIzNDphdGVzdA==
+
     An example request:
 
     .. code::
 
         GET /v1/computers/activity?q=814a37d89a79aa3975308e723bc1a3a67360323b7e3584de00896fe7c59bbb8e&offset=0&limit=5
+
+    .. http:example::
+
+        GET https://api.amp.cisco.com/v1/computers/activity?q=814a37d89a79aa3975308e723bc1a3a67360323b7e3584de00896fe7c59bbb8e&offset=0&limit=5 HTTP/1.1
+        Authorization: Basic MTIzNDphdGVzdA==
 
     An example response:
 
@@ -188,11 +207,21 @@ To hunt for computers that have seen a SHA-256 but have not created an event for
 
         GET /v1/events
 
+    .. http:example::
+
+        GET https://api.amp.cisco.com/v1/events HTTP/1.1
+        Authorization: Basic MTIzNDphdGVzdA==
+
     An example request:
 
     .. code::
 
         GET /v1/events?detection_sha256=b630e72639cc7340620adb0cfc26332ec52fe8867b769695f2d25718d68b1b40&limit=1
+
+    .. http:example::
+
+        GET https://api.amp.cisco.com/v1/events?detection_sha256=b630e72639cc7340620adb0cfc26332ec52fe8867b769695f2d25718d68b1b40&limit=1 HTTP/1.1
+        Authorization: Basic MTIzNDphdGVzdA==
 
     An example response:
 

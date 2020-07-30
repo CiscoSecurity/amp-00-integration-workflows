@@ -3,7 +3,7 @@ Getting Started
 
 `Cisco AMP for Endpoints API Docs <https://api-docs.amp.cisco.com/>`_
 
-A list of AMP scripts can be found `here <https://github.com/topics/amp-for-endpoints>`_.
+A list of AMP scripts can be found `here <https://github.com/search?q=org%3ACiscoSecurity+topic%3Aamp-for-endpoints>`_.
 
 Region Endpoints
 ----------------
@@ -18,9 +18,14 @@ The following endpoints are available and it is recommended to use v1 for every 
 Creating an API Client
 ----------------------
 
-1. Login to your `AMP for Endpoints Console <https://console.amp.cisco.com/>`_.
-2. Go to Accounts then Business Settings.
-3. Go to Features and click Configure API Credentials this will generate the ``Client ID`` and a secure ``API Key``.
+1. Login into the AMP for Endpoints `console <https://console.amp.cisco.com/>`_, click the ``Accounts`` menu and choose ``API Credentials``.
+2. Click ``New API Credential``, enter the ``Application name`` and ``Scope`` (action you want to allow) and then click ``Create``.
+3. From the ``API Key Details`` page, copy both the ``3rd Party API Client ID`` and the ``API Key``.
+
+    .. Warning::
+
+        Do not close the tab without retrieving these values; the API key is not retrievable once the tab is closed.
+
 4. You can now use your credentials to make API calls in the following format:
 
 .. code::
@@ -28,7 +33,7 @@ Creating an API Client
     https://<your_client_id>:<your_api_key>@<api_endpoint>
 
 .. NOTE::
-    Alternatively you can use Basic HTTP Authentication. Base 64 encode the string ":", and send that prefixed with the
+    Alternatively, you can use Basic HTTP Authentication Header. Base 64 encode the string ":", and send that prefixed with the
     string "Basic" as the authorization header. For instance, if your ``client_id`` was 1234, and your ``api_key`` was "atest",
     then it would be base64 encoded to "MTIzNDphdGVzdA==", and an example with your header would be:
 
@@ -61,6 +66,11 @@ To test that a client was created successfully run the following `request <https
 .. code::
 
     GET /v1/version
+
+.. http:example::
+
+    POST https://api.amp.cisco.com/v1/version HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
 
 
 Integration Requirements
@@ -102,17 +112,4 @@ detailing the status of their rate limit. If the limit is overrun, then an HTTP 
     - `X-Rate-Limit-Limit` - Total allowed requests in the current period.
     - `X-Rate-Limit-Remaining` - Requests left.
     - `X-Rate-Limit-Reset` - Number of seconds before the limit is reset.
-
-Test Validation
----------------
-
-Test validation is via WebEx. We will go through the integration and walk through the various components and how they
-function. We’ll generate various events and observe them being parsed by the product. As part of this we will also
-generate 1000+ events and validate how the events are handled. We’ve had issues with AMQP integrations in the past dropping
-connections and not recovering resulting in events being dropped. As part of this we’ll need to also require a week
-long test where a set number of events are generated throughout the week and validated that all events were captured and
-that the AMQP client is still receiving events.
-
-
-
 

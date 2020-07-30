@@ -13,12 +13,17 @@ the computer is in.
 Get SCD List GUIDs
 ^^^^^^^^^^^^^^^^^^
 
-To add a SHA256 to a SCD query using the following `request <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Ffile_lists%2Fsimple_custom_detections&api_host=api.amp.cisco.com&api_resource=File+List&api_version=v1>`_
-to get a list of the SCD file lists that are available:
+To add a SHA256 to a SCD list use the following `request <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Ffile_lists%2Fsimple_custom_detections&api_host=api.amp.cisco.com&api_resource=File+List&api_version=v1>`_
+to first get a list of the SCD file lists that are available:
 
 .. code::
 
     GET /v1/file_lists/simple_custom_detections
+
+.. http:example::
+
+    GET https://api.amp.cisco.com/v1/file_lists/simple_custom_detections HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
 
 This will return a list of SCD file lists for the organization:
 
@@ -72,11 +77,21 @@ To add a SHA256 to a SCD list use the following `request <https://api-docs.amp.c
 
     POST /v1/file_lists/{:file_list_guid}/files/{:sha256}
 
+.. http:example::
+
+    POST https://api.amp.cisco.com/v1/file_lists/{:file_list_guid}/files/{:sha256} HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
+
 If the user chose `Sample SCD List 1` and wanted to add the SHA256 ``d5cb3ef9816e8fd30cc9537bb394a7cc6c46c1dff1c65f11b527ef1df14edc3b`` the request would be:
 
 .. code::
 
     POST /v1/file_lists/e773a9eb-296c-40df-98d8-bed46322589d/files/d5cb3ef9816e8fd30cc9537bb394a7cc6c46c1dff1c65f11b527ef1df14edc3b
+
+.. http:example::
+
+    POST https://api.amp.cisco.com/v1/file_lists/e773a9eb-296c-40df-98d8-bed46322589d/files/d5cb3ef9816e8fd30cc9537bb394a7cc6c46c1dff1c65f11b527ef1df14edc3b HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
 
 Optionally a description can be send in the request body:
 
@@ -114,11 +129,21 @@ To remove a SHA256 from a SCD list use the following `request <https://api-docs.
 
     DELETE /v1/file_lists/{:file_list_guid}/files/{:sha256}
 
+.. http:example::
+
+    DELETE https://api.amp.cisco.com/v1/file_lists/{:file_list_guid}/files/{:sha256} HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
+
 If the user chose `Sample SCD List 1` and wanted to remove the SHA256 ``d5cb3ef9816e8fd30cc9537bb394a7cc6c46c1dff1c65f11b527ef1df14edc3b`` the request would be:
 
 .. code::
 
     DELETE /v1/file_lists/e773a9eb-296c-40df-98d8-bed46322589d/files/d5cb3ef9816e8fd30cc9537bb394a7cc6c46c1dff1c65f11b527ef1df14edc3b
+
+.. http:example::
+
+    DELETE https://api.amp.cisco.com/v1/file_lists/e773a9eb-296c-40df-98d8-bed46322589d/files/d5cb3ef9816e8fd30cc9537bb394a7cc6c46c1dff1c65f11b527ef1df14edc3b HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
 
 A successful request will return ``200`` status with a response body like this:
 
@@ -138,15 +163,25 @@ A successful request will return ``200`` status with a response body like this:
 Application Block List
 ----------------------
 
+Application Block Lists are only applicable to binaries. When the SHA-256 of a binary is added to the Application Block
+List, AMP will prevent that file from being executed. Adding the SHA-256 of a document or other file that is not a
+binary to an Application Block List will not result in any action occurring when the file is interacted with. When File
+Conviction Mode is set to Audit Application Block Lists will not be enforced.
+
 Get Application Block List GUIDs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To add a SHA256 to an Application Block List first query use the following `request <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Ffile_lists%2Fapplication_blocking&api_host=api.amp.cisco.com&api_resource=File+List&api_version=v1>`_
-to get a list of the Application Block Lists that are available:
+To add a SHA-256 to an Application Block List the following `request <https://api-docs.amp.cisco.com/api_actions/details?api_action=GET+%2Fv1%2Ffile_lists%2Fapplication_blocking&api_host=api.amp.cisco.com&api_resource=File+List&api_version=v1>`_
+to first get a list of the Application Block Lists that are available:
 
 .. code::
 
     GET /v1/file_lists/application_blocking
+
+.. http:example::
+
+    GET https://api.amp.cisco.com/v1/file_lists/application_blocking HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
 
 This will return a list of Application Block Lists for the organization:
 
@@ -200,6 +235,11 @@ To add a SHA256 to an Application Block list use the following `request <https:/
 
     POST /v1/file_lists/{:file_list_guid}/files/{:sha256}
 
+.. http:example::
+
+    POST https://api.amp.cisco.com/v1/file_lists/{:file_list_guid}/files/{:sha256} HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
+
 
 Remove a SHA256 from an Application Block List
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -210,8 +250,16 @@ To remove a SHA256 from an Application Block List use the following `request <ht
 
     DELETE /v1/file_lists/{:file_list_guid}/files/{:sha256}
 
+.. http:example::
+
+    DELETE https://api.amp.cisco.com/v1/file_lists/{:file_list_guid}/files/{:sha256} HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
+
 Move Host to Group
 ------------------
+
+To change which engines are enabled or disabled for an endpoint, the endpoint must be moved to a different group with a
+policy that enables or disables the desired engines.
 
 Get Group GUIDs
 ^^^^^^^^^^^^^^^
@@ -221,6 +269,11 @@ To fetch a list of all groups and their associated GUIDs use the following `requ
 .. code::
 
     GET /v1/groups
+
+.. http:example::
+
+    GET https://api.amp.cisco.com/v1/groups HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
 
 From the response parse out ``.data[].guid`` and ``.data[].name``. Present the user with the list of groups found in
 ``.data[].name``. When the user selects the group they would like to move hosts to save the
@@ -315,6 +368,11 @@ with the ``q`` parameter set to the SHA256 you want to lookup:
 
     GET /v1/computers/activity?q=SHA256
 
+.. http:example::
+
+    GET https://api.amp.cisco.com/v1/computers/activity?q=SHA256 HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
+
 This will return a list of computers that have seen that SHA256 regardless of any AMP for Endpoint event, the response
 will return a maximum of 500 endpoints per page. The ``.metadata.next`` URL can be queried to get the next page of
 endpoints and will only be present if there is more than one page of results.
@@ -368,6 +426,11 @@ for each connector GUID to validate the endpoint can be put into isolation:
 
     OPTIONS /v1/computers/{:connector_guid}/isolation
 
+.. http:example::
+
+    OPTIONS https://api.amp.cisco.com/v1/computers/{:connector_guid}/isolation HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
+
 An example response from the OPTIONS query:
 
 .. code::
@@ -389,6 +452,11 @@ to start isolation for that host:
 
     PUT /v1/computers/{:connector_guid}/isolation
 
+.. http:example::
+
+    PUT https://api.amp.cisco.com/v1/computers/{:connector_guid}/isolation HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
+
 If you skip checking what options are available and try to start isolation you will receive an error if the host is not
 a supported OS, isolation is not enabled in the policy, or the endpoint is in a transitional state or is already isolated.
 
@@ -407,6 +475,11 @@ For a general query of all vulnerabilities in the organization use the following
 
     GET /v1/vulnerabilities
 
+.. http:example::
+
+    GET https://api.amp.cisco.com/v1/vulnerabilities HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
+
 List of Specific Computers Within an Organization That Have Observed a Vulnerability With a Given SHA-256
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -415,6 +488,11 @@ To provide a list of computers on which the vulnerability has been observed with
 .. code::
 
     GET /v1/vulnerabilities/{:sha256}/computers
+
+.. http:example::
+
+    GET https://api.amp.cisco.com/v1/vulnerabilities/{:sha256}/computers HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
 
 Specific Endpoint Collection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -425,4 +503,8 @@ To fetch a list of events from a specific computer that has vulnerabilities use 
 
     GET /v1/events?connector_guid[]={:connector_guid}&event_type[]=1107296279
 
+.. http:example::
+
+    GET https://api.amp.cisco.com/v1/events?connector_guid[]={:connector_guid}&event_type[]=1107296279 HTTP/1.1
+    Authorization: Basic MTIzNDphdGVzdA==
 
